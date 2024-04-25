@@ -90,6 +90,9 @@ const CreatePage = () => {
                 </Button>
               </Link>
               <Button type="submit" disabled={!isValid || isSubmitting}>
+                {isSubmitting && (
+                  <div className="border-t-transparent border-solid animate-spin rounded-full border-slate-400 border-2 h-3 w-3 mr-3" />
+                )}
                 Continue
               </Button>
             </div>
