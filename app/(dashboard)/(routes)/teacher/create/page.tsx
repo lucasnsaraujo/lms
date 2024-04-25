@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as z from "zod";
@@ -22,6 +23,7 @@ const formSchema = z.object({
 });
 
 const CreatePage = () => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -32,13 +34,18 @@ const CreatePage = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await fetch("api/course", {
+      const response = await fetch("/api/courses", {
         body: JSON.stringify(values),
         method: "POST",
       });
       if (!response.ok) {
         throw new Error("Something went wrong");
       }
+
+      const data = await response.json();
+
+      router.push(`/teacher/courses/${data.id}`);
+      toast.success("Course created successfully! 🎉");
     } catch (error: any) {
       toast.error(error.message);
     }
