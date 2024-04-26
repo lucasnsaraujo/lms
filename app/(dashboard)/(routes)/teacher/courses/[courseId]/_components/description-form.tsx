@@ -23,15 +23,18 @@ import { Textarea } from "@/components/ui/textarea";
 
 interface DescriptionFormProps {
   initialData: {
-    description: string;
+    description?: string | null;
   };
   courseId: string;
 }
 
 const formSchema = z.object({
-  description: z.string().min(1, {
-    message: "Description is required",
-  }),
+  description: z
+    .string()
+    .min(1, {
+      message: "Description is required",
+    })
+    .nullable(),
 });
 
 export const DescriptionForm = ({
@@ -110,6 +113,7 @@ export const DescriptionForm = ({
                         disabled={isSubmitting}
                         placeholder="e.g.'Advanced web development'"
                         {...field}
+                        value={field.value!}
                       />
                     </FormControl>
                   </FormItem>
