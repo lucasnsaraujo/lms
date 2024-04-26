@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { TitleForm } from "./_components/title-form";
 import { DescriptionForm } from "./_components/description-form";
 import { ImageForm } from "./_components/image-form";
+import { CategoryForm } from "./_components/category-form";
 
 interface ICoursePage {
   params: {
@@ -26,8 +27,15 @@ const CoursePage = async ({ params }: ICoursePage) => {
     },
   });
 
+  const categories = await db.category.findMany({
+    orderBy: {
+      name: "asc",
+    },
+  });
+
   if (!course) return redirect("/");
 
+  // Check if all required fields are completed
   const requiredFields = [
     course.title,
     course.description,
@@ -60,6 +68,14 @@ const CoursePage = async ({ params }: ICoursePage) => {
           <TitleForm initialData={course} courseId={course.id} />
           <DescriptionForm initialData={course} courseId={course.id} />
           <ImageForm initialData={course} courseId={course.id} />
+          <CategoryForm
+            initialData={course}
+            courseId={course.id}
+            options={categories.map((category) => ({
+              label: category.name,
+              value: category.id,
+            }))}
+          />
         </div>
       </div>
     </div>
