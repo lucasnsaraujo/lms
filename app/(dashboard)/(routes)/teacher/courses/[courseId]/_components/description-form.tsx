@@ -20,21 +20,17 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
+import { Course } from "@prisma/client";
 
 interface DescriptionFormProps {
-  initialData: {
-    description?: string | null;
-  };
+  initialData: Course;
   courseId: string;
 }
 
 const formSchema = z.object({
-  description: z
-    .string()
-    .min(1, {
-      message: "Description is required",
-    })
-    .nullable(),
+  description: z.string().min(1, {
+    message: "Description is required",
+  }),
 });
 
 export const DescriptionForm = ({
@@ -47,7 +43,7 @@ export const DescriptionForm = ({
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData,
+    defaultValues: { description: initialData.description || "" },
   });
 
   const { isSubmitting, isValid } = form.formState;
@@ -113,7 +109,6 @@ export const DescriptionForm = ({
                         disabled={isSubmitting}
                         placeholder="e.g.'Advanced web development'"
                         {...field}
-                        value={field.value!}
                       />
                     </FormControl>
                   </FormItem>
