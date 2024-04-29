@@ -2,6 +2,7 @@
 
 import { ConfirmModal } from "@/components/modals/confirm-modal";
 import { Button } from "@/components/ui/button";
+import { useConfettiStore } from "@/hooks/use-confetti-store";
 import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -16,6 +17,7 @@ interface ActionsProps {
 export const Actions = ({ courseId, disabled, isPublished }: ActionsProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const confetti = useConfettiStore();
 
   const onClick = async () => {
     try {
@@ -28,8 +30,7 @@ export const Actions = ({ courseId, disabled, isPublished }: ActionsProps) => {
 
         if (!response.ok) throw new Error("Something went wrong");
 
-        toast.success("Chapter unpublished!");
-        router.push(`/teacher/courses/`);
+        toast.success("Course unpublished!");
       } else {
         const response = await fetch(`/api/courses/${courseId}/publish`, {
           method: "PATCH",
@@ -37,7 +38,8 @@ export const Actions = ({ courseId, disabled, isPublished }: ActionsProps) => {
 
         if (!response.ok) throw new Error("Something went wrong");
 
-        toast.success("Chapter published!");
+        toast.success("Course published!");
+        confetti.onOpen();
       }
 
       router.refresh();
@@ -58,8 +60,8 @@ export const Actions = ({ courseId, disabled, isPublished }: ActionsProps) => {
         throw new Error("Something went wrong");
       }
 
-      toast.success("Chapter deleted!");
-      router.push(`/teacher/courses/${courseId}`);
+      toast.success("Course deleted!");
+      router.push(`/teacher/courses/`);
       router.refresh();
     } catch (error: any) {
       toast.error(error.message);

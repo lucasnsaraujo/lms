@@ -33,7 +33,7 @@ export async function PATCH(
         userId,
       },
       data: {
-        isPublished: true,
+        isPublished: false,
       },
     });
 
