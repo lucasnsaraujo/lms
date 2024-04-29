@@ -49,7 +49,7 @@ const ChapterIdPage = async ({ params }: ChapterIdPageProps) => {
     <>
       {!chapter.isPublished && (
         <Banner
-          label=" This chapter is not published yet. Students won't be able to access it until you publish it."
+          label="This chapter is not published yet. Students won't be able to access it until you publish it."
           variant={"warning"}
         />
       )}
