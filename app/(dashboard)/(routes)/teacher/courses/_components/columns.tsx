@@ -10,7 +10,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react";
 import Link from "next/link";
@@ -70,7 +70,12 @@ export const columns: ColumnDef<Course>[] = [
       const isPublished = row.getValue("isPublished") || false;
 
       return (
-        <Badge className={cn("bg-slate-500", isPublished && "bg-sky-700")}>
+        <Badge
+          className={cn(
+            "bg-slate-500 hover:bg-slate-700",
+            isPublished && "bg-sky-700 hover:bg-sky-900"
+          )}
+        >
           {isPublished ? "Published" : "Draft"}
         </Badge>
       );
