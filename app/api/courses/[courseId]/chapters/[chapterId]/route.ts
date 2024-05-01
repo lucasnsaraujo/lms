@@ -124,7 +124,11 @@ export async function PATCH(
         },
       });
       if (existingMuxData) {
-        await video.assets.delete(existingMuxData.assetId);
+        try {
+          await video.assets.delete(existingMuxData.assetId);
+        } catch (error) {
+          console.log("[MUX_DELETE_ASSET]", error);
+        }
         await db.muxData.delete({
           where: {
             id: existingMuxData.id,
@@ -150,7 +154,7 @@ export async function PATCH(
 
     return NextResponse.json(chapter);
   } catch (error: any) {
-    console.log("[CHAPTER_ID_PATCH] ", error.message);
+    console.log("[CHAPTER_ID_PATCH] ", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
