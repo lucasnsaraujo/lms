@@ -25,10 +25,13 @@ export async function POST(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
+    console.log(url);
+    console.log(url.split("f/")[1]);
+
     const attachment = await db.attachment.create({
       data: {
         url,
-        name: url.split("").pop(),
+        name: url.split("f/")[1],
         courseId: params.courseId,
       },
     });
