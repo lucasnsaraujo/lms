@@ -6,17 +6,17 @@ import { db } from "@/lib/db";
 
 export async function POST(req: Request) {
   const body = await req.json();
+
   console.log(body);
-  console.log(req.headers);
-  const signature = (req.headers as any)["stripe-signature"] as string;
-  console.log({ signature });
+  const signature = req.headers.get("stripe-signature") as string;
+  console.log(`signature: ${signature}`);
 
   let event: Stripe.Event;
 
   try {
     event = stripe.webhooks.constructEvent(
-      body,
-      signature,
+      JSON.stringify(body),
+      signature.toString(),
       process.env.STRIPE_WEBHOOK_SECRET!
     );
   } catch (error: any) {
