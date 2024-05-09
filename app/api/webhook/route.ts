@@ -5,18 +5,17 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
 export async function POST(req: Request) {
-  const body = await req.json();
+  const body = await req.text();
 
   console.log(body);
-  const signature = req.headers.get("stripe-signature") as string;
+  const signature = headers().get("stripe-signature") as string;
   console.log(`signature: ${signature}`);
-
   let event: Stripe.Event;
 
   try {
     event = stripe.webhooks.constructEvent(
-      JSON.stringify(body),
-      signature.toString(),
+      body,
+      signature,
       process.env.STRIPE_WEBHOOK_SECRET!
     );
   } catch (error: any) {
