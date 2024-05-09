@@ -5,8 +5,10 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
 export async function POST(req: Request) {
-  const body = await req.text();
-  const signature = headers().get("Stripe-Signature") as string;
+  const body = await req.json();
+  console.log(body);
+  const signature = req.headers.get("stripe-signature") as string;
+  console.log({ signature });
 
   let event: Stripe.Event;
 
@@ -31,7 +33,7 @@ export async function POST(req: Request) {
       });
     }
 
-    const created = await db.purchase.create({
+    await db.purchase.create({
       data: {
         courseId,
         userId,
